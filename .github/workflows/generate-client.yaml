@@ -36,7 +36,7 @@ jobs:
       - name: Extract version from OpenAPI spec
         id: version
         run: |
-          VERSION=$(yq '.info.version' openapi.yaml)
+          VERSION=$(yq '.info.version' ./openapi.yaml)
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Check for version change
