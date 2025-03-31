@@ -74,11 +74,10 @@ jobs:
       - name: Commit and push changes
         if: steps.check.outputs.changed == 'true'
         run: |
-          CURRENT_VERSION=$(yq -p=json '.info.version' ./openapi.json)
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add $OUTPUT_DIR openapi.json $VERSION_FILE
-          git commit -m "chore: update client for OpenAPI version $CURRENT_VERSION"
+          git add openapi.json $VERSION_FILE src/ dist/ || echo "No changes to add"
+          git diff --cached --quiet || git commit -m "chore: update client for OpenAPI version ${{ steps.check.outputs.version }}"
           git push
 
       # - name: Bump package version and publish
