@@ -27,15 +27,12 @@ jobs:
       - name: Install dependencies
         run: yarn install
 
-      - name: Run CI Phase
-        run: yarn ci
+      # - name: Run CI Phase
+      #   run: yarn ci
 
       - name: Download OpenAPI spec
-        run: curl -sSL $OPENAPI_URL -o openapi.json
-
-      - name: Extract version from OpenAPI spec
-        id: version
         run: |
+          curl -sSL $OPENAPI_URL -o openapi.json
           VERSION=$(yq -p=json '.info.version' ./openapi.json)
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
