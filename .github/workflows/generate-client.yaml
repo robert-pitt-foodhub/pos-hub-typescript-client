@@ -25,6 +25,9 @@ jobs:
           cache: "yarn"
 
       - name: Install dependencies
+        run: yarn install
+
+      - name: Run CI Phase
         run: yarn ci
 
       - name: Download OpenAPI spec
