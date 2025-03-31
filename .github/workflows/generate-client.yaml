@@ -42,7 +42,7 @@ jobs:
       - name: Check for version change
         id: check
         run: |
-          CURRENT_VERSION="${{ steps.  }}"
+          CURRENT_VERSION="${{ steps.version.outputs.version }}"
           echo "Latest OpenAPI version: $CURRENT_VERSION"
           if [ -f $VERSION_FILE ]; then
             STORED_VERSION=$(cat $VERSION_FILE)
@@ -58,12 +58,9 @@ jobs:
             echo "changed=false" >> $GITHUB_OUTPUT
           fi
 
-      - name: Generate the latest client
+      - name: Generate TypeScript client
         if: steps.check.outputs.changed == 'true'
         run: yarn generate
-
-      # - name: Run tests
-      #   run: yarn test
 
       # - name: Update stored version
       #   if: steps.check.outputs.changed == 'true'
