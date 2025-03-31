@@ -8,7 +8,7 @@
   ],
   "license": "MIT",
   "scripts": {
-    "ci": "yarn generate && yarn build",
+    "republish": "yarn generate && yarn build && yarn publish",
     "generate": "orval generate --config ./orval.config.ts",
     "build": "yarn workspaces run build"
   },

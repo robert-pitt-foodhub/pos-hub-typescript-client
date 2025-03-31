@@ -42,7 +42,7 @@ jobs:
       - name: Check for version change
         id: check
         run: |
-          CURRENT_VERSION="${{ steps.version.outputs.version }}"
+          CURRENT_VERSION="${{ steps.  }}"
           echo "Latest OpenAPI version: $CURRENT_VERSION"
           if [ -f $VERSION_FILE ]; then
             STORED_VERSION=$(cat $VERSION_FILE)
@@ -58,38 +58,37 @@ jobs:
             echo "changed=false" >> $GITHUB_OUTPUT
           fi
 
-      - name: Generate TypeScript client
+      - name: Generate the latest client
         if: steps.check.outputs.changed == 'true'
-        run: |
-          npx openapi-typescript-codegen \
-            --input openapi.yaml \
-            --output $OUTPUT_DIR \
-            --client fetch
+        run: yarn generate
 
-      - name: Update stored version
-        if: steps.check.outputs.changed == 'true'
-        run: echo "${{ steps.version.outputs.version }}" > $VERSION_FILE
+      # - name: Run tests
+      #   run: yarn test
 
-      - name: Commit and push changes
-        if: steps.check.outputs.changed == 'true'
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add $OUTPUT_DIR openapi.yaml $VERSION_FILE
-          git commit -m "chore: update client for OpenAPI version ${{ steps.version.outputs.version }}"
-          git push
+      # - name: Update stored version
+      #   if: steps.check.outputs.changed == 'true'
+      #   run: echo "${{ steps.version.outputs.version }}" > $VERSION_FILE
 
-      - name: Bump package version and publish
-        if: steps.check.outputs.changed == 'true'
-        run: |
-          npm version patch --no-git-tag-version
-          git add package.json package-lock.json
-          git commit -m "chore: bump version for OpenAPI update"
-          git tag "v$(node -p "require('./package.json').version")"
-          git push --follow-tags
+      # - name: Commit and push changes
+      #   if: steps.check.outputs.changed == 'true'
+      #   run: |
+      #     git config user.name "github-actions[bot]"
+      #     git config user.email "github-actions[bot]@users.noreply.github.com"
+      #     git add $OUTPUT_DIR openapi.yaml $VERSION_FILE
+      #     git commit -m "chore: update client for OpenAPI version ${{ steps.version.outputs.version }}"
+      #     git push
 
-      - name: Publish to npm
-        if: steps.check.outputs.changed == 'true'
-        run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      # - name: Bump package version and publish
+      #   if: steps.check.outputs.changed == 'true'
+      #   run: |
+      #     npm version patch --no-git-tag-version
+      #     git add package.json package-lock.json
+      #     git commit -m "chore: bump version for OpenAPI update"
+      #     git tag "v$(node -p "require('./package.json').version")"
+      #     git push --follow-tags
+
+      # - name: Publish to npm
+      #   if: steps.check.outputs.changed == 'true'
+      #   run: npm publish
+      #   env:
+      #     NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
