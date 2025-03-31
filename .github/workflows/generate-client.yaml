@@ -17,25 +17,18 @@ jobs:
       VERSION_FILE: .openapi-version
 
     steps:
-      # First we checkout the repository
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Then we set up Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "20"
           cache: "yarn"
 
-      # Install dependencies
       - name: Install dependencies
         run: yarn install
 
-      # - name: Run CI Phase
-      #   run: yarn ci
-
-      # Download OpenAPI spec and extract version into outputs
       - name: Download OpenAPI spec
         run: curl -sSL $OPENAPI_URL -o openapi.json
 
@@ -93,8 +86,8 @@ jobs:
       #     git tag "v$(node -p "require('./package.json').version")"
       #     git push --follow-tags
 
-      # - name: Publish to npm
-      #   if: steps.check.outputs.changed == 'true'
-      #   run: npm publish
-      #   env:
-      #     NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Publish to npm
+        if: steps.check.outputs.changed == 'true'
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
