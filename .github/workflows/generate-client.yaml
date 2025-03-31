@@ -74,8 +74,9 @@ jobs:
           git diff --cached --quiet || git commit -m "chore: update client for OpenAPI version ${{ steps.check.outputs.version }}"
           # Tag the commit
           git tag "v${{ steps.check.outputs.version }}"
-          git push
+          # Push tag first as it will fail if the tag already exists
           git push origin "v${{ steps.check.outputs.version }}"
+          git push
 
       # - name: Bump package version and publish
       #   if: steps.check.outputs.changed == 'true'
