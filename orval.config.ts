@@ -1,6 +1,6 @@
 export default {
   "react-query": {
-    input: "https://api.tryposhub.com/docs/specification.json",
+    input: "./openapi.json",
     validation: true,
     output: {
       mode: "split",
@@ -17,7 +17,7 @@ export default {
     },
   },
   axios: {
-    input: "https://api.tryposhub.com/docs/specification.json",
+    input: "./openapi.json",
     validation: true,
     output: {
       mode: "split",

@@ -11,7 +11,6 @@ jobs:
 
     env:
       OPENAPI_URL: https://api.tryposhub.com/docs/specification.json
-      OUTPUT_DIR: src/client
       VERSION_FILE: .openapi-version
 
     steps:
