@@ -5,6 +5,9 @@ on:
     - cron: "0 3 * * *" # Runs daily at 3:00 UTC
   workflow_dispatch: # Manual trigger
 
+permissions:
+  contents: write # Required to push changes back to the repository
+
 jobs:
   generate-client:
     runs-on: ubuntu-latest
