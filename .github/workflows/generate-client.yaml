@@ -46,6 +46,7 @@ jobs:
           echo "Latest OpenAPI version: $CURRENT_VERSION"
           if [ -f $VERSION_FILE ]; then
             STORED_VERSION=$(cat $VERSION_FILE)
+            echo "version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
           else
             STORED_VERSION=""
           fi
@@ -68,7 +69,7 @@ jobs:
 
       - name: Update stored version
         if: steps.check.outputs.changed == 'true'
-        run: echo "${{ steps.version.outputs.version }}" > $VERSION_FILE
+        run: echo "${{ steps.check.outputs.version }}" > $VERSION_FILE
 
       - name: Commit and push changes
         if: steps.check.outputs.changed == 'true'
