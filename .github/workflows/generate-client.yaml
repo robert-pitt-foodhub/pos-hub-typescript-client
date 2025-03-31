@@ -1,0 +1,92 @@
+name: Generate TypeScript client from OpenAPI
+
+on:
+  schedule:
+    - cron: "0 3 * * *" # Runs daily at 3:00 UTC
+  workflow_dispatch: # Manual trigger
+
+jobs:
+  generate-client:
+    runs-on: ubuntu-latest
+
+    env:
+      OPENAPI_URL: https://api.tryposhub.com/docs/specification.json
+      OUTPUT_DIR: src/client
+      VERSION_FILE: .openapi-version
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Download OpenAPI spec
+        run: curl -sSL $OPENAPI_URL -o openapi.yaml
+
+      - name: Extract version from OpenAPI spec
+        id: version
+        run: |
+          VERSION=$(yq '.info.version' openapi.yaml)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Check for version change
+        id: check
+        run: |
+          CURRENT_VERSION="${{ steps.version.outputs.version }}"
+          echo "Latest OpenAPI version: $CURRENT_VERSION"
+          if [ -f $VERSION_FILE ]; then
+            STORED_VERSION=$(cat $VERSION_FILE)
+          else
+            STORED_VERSION=""
+          fi
+
+          echo "Stored version: $STORED_VERSION"
+
+          if [ "$CURRENT_VERSION" != "$STORED_VERSION" ]; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Generate TypeScript client
+        if: steps.check.outputs.changed == 'true'
+        run: |
+          npx openapi-typescript-codegen \
+            --input openapi.yaml \
+            --output $OUTPUT_DIR \
+            --client fetch
+
+      - name: Update stored version
+        if: steps.check.outputs.changed == 'true'
+        run: echo "${{ steps.version.outputs.version }}" > $VERSION_FILE
+
+      - name: Commit and push changes
+        if: steps.check.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add $OUTPUT_DIR openapi.yaml $VERSION_FILE
+          git commit -m "chore: update client for OpenAPI version ${{ steps.version.outputs.version }}"
+          git push
+
+      - name: Bump package version and publish
+        if: steps.check.outputs.changed == 'true'
+        run: |
+          npm version patch --no-git-tag-version
+          git add package.json package-lock.json
+          git commit -m "chore: bump version for OpenAPI update"
+          git tag "v$(node -p "require('./package.json').version")"
+          git push --follow-tags
+
+      - name: Publish to npm
+        if: steps.check.outputs.changed == 'true'
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
