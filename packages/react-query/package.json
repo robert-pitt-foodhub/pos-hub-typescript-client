@@ -1,0 +1,12 @@
+{
+  "name": "@tryposhub/react-query-client",
+  "version": "1.0.0",
+  "main": "./dist/index.js",
+  "type": "module",
+  "scripts": {
+    "build": "bunchee"
+  },
+  "peerDependencies": {
+    "@tanstack/react-query": "*"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "private": true,
+  "name": "@tryposhub/global",
+  "version": "1.0.0",
+  "author": "robertpitt <robertpitt1988@gmail.com>",
+  "workspaces": [
+    "packages/*"
+  ],
+  "license": "MIT",
+  "scripts": {
+    "generate": "orval generate --config ./orval.config.ts",
+    "build": "yarn workspaces run build"
+  },
+  "devDependencies": {
+    "@tanstack/react-query": "^5.71.1",
+    "axios": "^1.8.4",
+    "bunchee": "^6.5.0",
+    "orval": "^7.7.0",
+    "typescript": "^5.8.2"
+  }
+}
