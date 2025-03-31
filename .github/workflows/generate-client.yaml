@@ -31,6 +31,7 @@ jobs:
       #   run: yarn ci
 
       - name: Download OpenAPI spec
+        id: spec
         run: |
           curl -sSL $OPENAPI_URL -o openapi.json
           VERSION=$(yq -p=json '.info.version' ./openapi.json)
@@ -39,7 +40,7 @@ jobs:
       - name: Check for version change
         id: check
         run: |
-          CURRENT_VERSION="${{ steps.version.outputs.version }}"
+          CURRENT_VERSION="${{ steps.version.spec.version }}"
           echo "Latest OpenAPI version: $CURRENT_VERSION"
           if [ -f $VERSION_FILE ]; then
             STORED_VERSION=$(cat $VERSION_FILE)
