@@ -63,18 +63,19 @@ jobs:
         if: steps.check.outputs.changed == 'true'
         run: yarn build
 
-      # - name: Update stored version
-      #   if: steps.check.outputs.changed == 'true'
-      #   run: echo "${{ steps.version.outputs.version }}" > $VERSION_FILE
+      - name: Update stored version
+        if: steps.check.outputs.changed == 'true'
+        run: echo "${{ steps.version.outputs.version }}" > $VERSION_FILE
 
-      # - name: Commit and push changes
-      #   if: steps.check.outputs.changed == 'true'
-      #   run: |
-      #     git config user.name "github-actions[bot]"
-      #     git config user.email "github-actions[bot]@users.noreply.github.com"
-      #     git add $OUTPUT_DIR openapi.yaml $VERSION_FILE
-      #     git commit -m "chore: update client for OpenAPI version ${{ steps.version.outputs.version }}"
-      #     git push
+      - name: Commit and push changes
+        if: steps.check.outputs.changed == 'true'
+        run: |
+          CURRENT_VERSION=$(yq -p=json '.info.version' ./openapi.json)
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add $OUTPUT_DIR openapi.json $VERSION_FILE
+          git commit -m "chore: update client for OpenAPI version $CURRENT_VERSION"
+          git push
 
       # - name: Bump package version and publish
       #   if: steps.check.outputs.changed == 'true'
