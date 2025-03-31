@@ -15,32 +15,32 @@ jobs:
       VERSION_FILE: .openapi-version
 
     steps:
+      # First we checkout the repository
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # Then we set up Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "20"
           cache: "yarn"
 
+      # Install dependencies
       - name: Install dependencies
         run: yarn install
 
       # - name: Run CI Phase
       #   run: yarn ci
 
+      # Download OpenAPI spec and extract version into outputs
       - name: Download OpenAPI spec
-        id: spec
-        run: |
-          curl -sSL $OPENAPI_URL -o openapi.json
-          VERSION=$(yq -p=json '.info.version' ./openapi.json)
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
+        run: curl -sSL $OPENAPI_URL -o openapi.json
 
       - name: Check for version change
         id: check
         run: |
-          CURRENT_VERSION="${{ steps.version.spec.version }}"
+          CURRENT_VERSION=$(yq -p=json '.info.version' ./openapi.json)
           echo "Latest OpenAPI version: $CURRENT_VERSION"
           if [ -f $VERSION_FILE ]; then
             STORED_VERSION=$(cat $VERSION_FILE)
