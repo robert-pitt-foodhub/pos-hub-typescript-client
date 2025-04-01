@@ -60,7 +60,9 @@ jobs:
 
       - name: NX Release
         if: steps.check.outputs.changed == 'true'
-        run: yarn nx release ${{ steps.check.outputs.version }} -y
+        run: |
+          yarn config set registry https://registry.npmjs.org
+          yarn nx release ${{ steps.check.outputs.version }} -y
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
