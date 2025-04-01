@@ -67,10 +67,10 @@ jobs:
           VERSION=${{ steps.check.outputs.version }}
           echo "Setting version to $VERSION"
 
-          for pkg in $(yq eval '.workspaces[]' package.json | tr -d '"'); do
+          for pkg in $(yq e '.workspaces[]' package.json | tr -d '"'); do
             for manifest in $(find "$pkg" -name package.json); do
               echo "Updating $manifest"
-              yq -p=json -o=json --arg v "$VERSION" '.version = $v' "$manifest" > tmp.json && mv tmp.json "$manifest"
+              yq e -i ".version = \"$VERSION\"" "$manifest"
             done
           done
 
