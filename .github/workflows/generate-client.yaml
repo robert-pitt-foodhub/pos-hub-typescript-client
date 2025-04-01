@@ -29,7 +29,7 @@ jobs:
           registry-url: "https://registry.npmjs.org"
 
       - name: Set yarn to v3
-        run: yarn set version berry
+        run: yarn set version 3.x
 
       - name: Install dependencies
         run: yarn install
