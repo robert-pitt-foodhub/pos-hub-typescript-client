@@ -13,10 +13,16 @@
     "build": "yarn workspaces run build"
   },
   "devDependencies": {
+    "@nx/js": "20.7.0",
+    "@swc-node/register": "~1.9.1",
+    "@swc/core": "~1.5.7",
+    "@swc/helpers": "~0.5.11",
     "@tanstack/react-query": "^5.71.1",
     "axios": "^1.8.4",
     "bunchee": "^6.5.0",
+    "nx": "20.7.0",
     "orval": "^7.7.0",
     "typescript": "^5.8.2"
-  }
+  },
+  "dependencies": {}
 }
