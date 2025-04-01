@@ -18,7 +18,9 @@
   ],
   "release": {
     "changelog": {
-      "automaticFromRef": true
+      "workspaceChangelog": {
+        "createRelease": "github"
+      }
     },
     "git": {
       "commitMessage": "chore: updated version [no ci]"
