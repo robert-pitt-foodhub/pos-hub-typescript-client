@@ -57,36 +57,40 @@ jobs:
         if: steps.check.outputs.changed == 'true'
         run: yarn generate
 
-      - name: Build the distribution
+      - name: NX Release
         if: steps.check.outputs.changed == 'true'
-        run: yarn build
+        run: yarn nx release --all --version ${{ steps.check.outputs.version }}
 
-      - name: Update all package.json versions
-        if: steps.check.outputs.changed == 'true'
-        run: |
-          VERSION=${{ steps.check.outputs.version }}
-          echo "Setting version to $VERSION"
+      # - name: Build the distribution
+      #   if: steps.check.outputs.changed == 'true'
+      #   run: yarn build
 
-          for pkg in $(yq e '.workspaces[]' package.json | tr -d '"'); do
-            for manifest in $(find "$pkg" -name package.json); do
-              echo "Updating $manifest"
-              yq e -i ".version = \"$VERSION\"" "$manifest"
-            done
-          done
+      # - name: Update all package.json versions
+      #   if: steps.check.outputs.changed == 'true'
+      #   run: |
+      #     VERSION=${{ steps.check.outputs.version }}
+      #     echo "Setting version to $VERSION"
 
-      - name: Publish packages
-        if: steps.check.outputs.changed == 'true'
-        run: yarn workspaces run yarn npm publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      #     for pkg in $(yq e '.workspaces[]' package.json | tr -d '"'); do
+      #       for manifest in $(find "$pkg" -name package.json); do
+      #         echo "Updating $manifest"
+      #         yq e -i ".version = \"$VERSION\"" "$manifest"
+      #       done
+      #     done
 
-      - name: Commit and tag changes
-        if: steps.check.outputs.changed == 'true'
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add . || echo "No changes to add"
-          git diff --cached --quiet || git commit -m "chore: update client for OpenAPI version ${{ steps.check.outputs.version }}"
-          git tag "v${{ steps.check.outputs.version }}"
-          git push origin "v${{ steps.check.outputs.version }}"
-          git push
+      # - name: Publish packages
+      #   if: steps.check.outputs.changed == 'true'
+      #   run: yarn workspaces run yarn npm publish --access public
+      #   env:
+      #     NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      # - name: Commit and tag changes
+      #   if: steps.check.outputs.changed == 'true'
+      #   run: |
+      #     git config user.name "github-actions[bot]"
+      #     git config user.email "github-actions[bot]@users.noreply.github.com"
+      #     git add . || echo "No changes to add"
+      #     git diff --cached --quiet || git commit -m "chore: update client for OpenAPI version ${{ steps.check.outputs.version }}"
+      #     git tag "v${{ steps.check.outputs.version }}"
+      #     git push origin "v${{ steps.check.outputs.version }}"
+      #     git push

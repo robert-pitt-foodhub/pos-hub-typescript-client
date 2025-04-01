@@ -8,8 +8,8 @@
   ],
   "license": "MIT",
   "scripts": {
-    "republish": "yarn generate && yarn build && yarn publish",
     "generate": "orval generate --config ./orval.config.ts",
+    "release": "nx release",
     "build": "yarn workspaces run build"
   },
   "devDependencies": {
