@@ -23,17 +23,17 @@ jobs:
         with:
           fetch-depth: 0 # Required to fetch all tags
 
+      - name: Configure Git user
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "20"
           cache: "yarn"
           registry-url: "https://registry.npmjs.org"
-
-      # - name: Set Yarn to v3 and enable it with Corepack
-      #   run: |
-      #     corepack enable
-      #     corepack prepare yarn@stable --activate
 
       - name: Install dependencies
         run: yarn install
