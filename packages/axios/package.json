@@ -12,6 +12,7 @@
   "version": "1.8.9-5",
   "license": "MIT",
   "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "type": "module",
   "publishConfig": {
     "access": "public"
