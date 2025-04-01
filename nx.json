@@ -26,7 +26,8 @@
       "commitMessage": "chore: updated version [no ci]"
     },
     "version": {
-      "conventionalCommits": true
+      "conventionalCommits": true,
+      "preVersionCommand": "yarn nx run-many -t build"
     }
   }
 }
