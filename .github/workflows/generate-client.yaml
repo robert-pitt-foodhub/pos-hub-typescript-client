@@ -76,7 +76,7 @@ jobs:
 
       - name: Publish packages
         if: steps.check.outputs.changed == 'true'
-        run: yarn workspaces run yarn publish --access public
+        run: yarn workspaces run npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
