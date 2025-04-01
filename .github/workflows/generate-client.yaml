@@ -65,6 +65,15 @@ jobs:
         if: steps.check.outputs.changed == 'true'
         run: echo "${{ steps.check.outputs.version }}" > $VERSION_FILE
 
+      - name: Update package.json version
+        if: steps.check.outputs.changed == 'true'
+        run: yarn workspaces foreach --topological --verbose version ${{ steps.check.outputs.version }}
+
+      # Oublish all packages
+      - name: Publish packages
+        if: steps.check.outputs.changed == 'true'
+        run: yarn workspaces foreach --topological --verbose run publish
+
       - name: Commit and push changes
         if: steps.check.outputs.changed == 'true'
         run: |

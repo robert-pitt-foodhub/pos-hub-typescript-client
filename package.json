@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "@tryposhub/global",
+  "name": "base",
   "version": "1.0.0",
   "author": "robertpitt <robertpitt1988@gmail.com>",
   "workspaces": [
