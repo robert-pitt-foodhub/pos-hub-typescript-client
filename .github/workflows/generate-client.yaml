@@ -59,7 +59,7 @@ jobs:
 
       - name: NX Release
         if: steps.check.outputs.changed == 'true'
-        run: yarn nx release ${{ steps.check.outputs.version }} --all --version
+        run: yarn nx release ${{ steps.check.outputs.version }} --verbose
 
       # - name: Build the distribution
       #   if: steps.check.outputs.changed == 'true'

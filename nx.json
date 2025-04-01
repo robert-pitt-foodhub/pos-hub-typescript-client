@@ -19,6 +19,12 @@
   "release": {
     "changelog": {
       "automaticFromRef": true
+    },
+    "git": {
+      "commitMessage": "chore: updated version [no ci]"
+    },
+    "version": {
+      "conventionalCommits": true
     }
   }
 }
