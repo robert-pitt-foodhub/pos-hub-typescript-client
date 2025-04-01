@@ -1,6 +1,6 @@
 {
   "name": "@tryposhub/axios-client",
-  "version": "1.0.0",
+  "version": "",
   "main": "./dist/index.js",
   "type": "module",
   "scripts": {
