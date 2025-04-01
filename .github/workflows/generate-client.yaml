@@ -60,13 +60,7 @@ jobs:
 
       - name: NX Release
         if: steps.check.outputs.changed == 'true'
-        run: yarn nx release publish ${{ steps.check.outputs.version }} --skip-publish
-
-      - name: NX Publish
-        if: steps.check.outputs.changed == 'true'
-        run: yarn nx release publish ${{ steps.check.outputs.version }}
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: yarn nx release ${{ steps.check.outputs.version }} -y
 
       # - name: Build the distribution
       #   if: steps.check.outputs.changed == 'true'
