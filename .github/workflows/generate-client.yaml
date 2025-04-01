@@ -75,7 +75,9 @@ jobs:
 
       - name: Publish packages
         if: steps.check.outputs.changed == 'true'
-        run: yarn workspaces foreach --topological --verbose run publish
+        run: yarn workspaces run publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Commit and tag changes
         if: steps.check.outputs.changed == 'true'
