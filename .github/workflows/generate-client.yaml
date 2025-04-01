@@ -76,7 +76,7 @@ jobs:
 
       - name: Publish packages
         if: steps.check.outputs.changed == 'true'
-        run: yarn workspaces run publish --access public
+        run: yarn workspaces run yarn publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
@@ -90,9 +90,3 @@ jobs:
           git tag "v${{ steps.check.outputs.version }}"
           git push origin "v${{ steps.check.outputs.version }}"
           git push
-
-      - name: Publish to npm
-        if: steps.check.outputs.changed == 'true'
-        run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
