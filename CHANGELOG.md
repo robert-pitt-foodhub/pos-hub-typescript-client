@@ -1,3 +1,7 @@
+## 1.8.9-32 (2025-05-07)
+
+This was a version bump only, there were no code changes.
+
 ## 1.8.9-21 (2025-04-24)
 
 This was a version bump only, there were no code changes.
